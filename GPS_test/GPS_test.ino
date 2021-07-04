@@ -320,6 +320,54 @@ void send_payload(char type)
    * LON        : dddmm.ssE or dddmm.ssW
    * STATUS TEXT: Free form text
    * 
+   * TYPE : TELEMETRY REPORT FORMAT
+   * ..............................................................................
+   * |DATA TYPE |  SEQUENCE NO | ANALOG 1 | ANALOG 2 | ANALOG 3 | ANALOG 4| ANALOG 5 | DIGITAL VALUE| COMMENT
+   * ------------------------------------------------------------------------------
+   * |1 byte    |  5 bytes     | 4 bytes  | 4 bytes  |4 bytes    | 4 bytes| 4 bytes  | 8 bytes      | n bytes
+   * ------------------------------------------------------------------------------
+   * 
+   * DATA TYPE    : T
+   * SEQUENCE NO  : #xxx,(3-digit number)
+   * ANALOG FIELD : xxx,(decimal 0-255)
+   * DIGITAL FIELD: bbbbbbbb (binary 0/1)
+   * COMMENT      : n
+   *
+   *
+   * TYPE : TELEMETRY PARAMETER NAME FORMAT
+   * ..............................................................................
+   * |  PARM.  | A1  | A2  | A3  | A4  | A5  | B1  | B2  | B3  | B4  | B5  | B6  | B7  | B8  |
+   * ------------------------------------------------------------------------------
+   * | 5 bytes | 1-7 | 1-7 | 1-6 | 1-6 | 1-5 | 1-6 | 1-5 | 1-4 | 1-4 | 1-4 | 1-3 | 1-3 | 1-3 |
+   * ------------------------------------------------------------------------------
+   * 
+   * PARM.        : PARM.
+   * ANALOG 1     : N...
+   * ANALOG 2-5   : ,N...
+   * DIGITAL 1-8  : ,N...
+   *
+   * TYPE : TELEMETRY UNIT NAME FORMAT
+   * ..............................................................................
+   * |  UNIT.  | A1  | A2  | A3  | A4  | A5  | B1  | B2  | B3  | B4  | B5  | B6  | B7  | B8  |
+   * ------------------------------------------------------------------------------
+   * | 5 bytes | 1-7 | 1-7 | 1-6 | 1-6 | 1-5 | 1-6 | 1-5 | 1-4 | 1-4 | 1-4 | 1-3 | 1-3 | 1-3 |
+   * ------------------------------------------------------------------------------
+   * 
+   * UNIT.        : UNIT.
+   * ANALOG 1     : N...
+   * ANALOG 2-5   : ,N...
+   * DIGITAL 1-8  : ,N...
+   *
+   * TYPE : TELEMETRY BIT SENSE FORMAT
+   * ..............................................................................
+   * |  BITS.  | B1  | B2  | B3  | B4  | B5  | B6  | B7  | B8  |TITLE|
+   * ------------------------------------------------------------------------------
+   * | 5 bytes | 1   | 1   | 1   | 1   | 1   | 1   | 1   | 1   | 0-23|
+   * ------------------------------------------------------------------------------
+   * 
+   * BITS.        : BITS.
+   * B1-B8        : x (boolean "polarity" value)
+   * TITLE        : Project Title (String)
    * 
    * All of the data are sent in the form of ASCII Text, not shifted.
    * 
