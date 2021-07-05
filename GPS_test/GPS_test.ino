@@ -32,6 +32,10 @@
 #define _DT_EXP     ','
 #define _DT_STATUS  '>'
 #define _DT_POS     '!'
+#define _TELEM      'T'
+#define _T_PARM     "PARM."
+#define _T_UNIT     "UNIT."
+#define _T_BITS     "BIS."
 
 #define _GPRMC          1
 #define _FIXPOS         2
@@ -116,6 +120,47 @@ unsigned short crc=0xffff;
 SoftwareSerial gps = SoftwareSerial(8,9);
 char rmc[100];
 char rmc_stat;
+
+//some variables for telemetry
+char  sequence[3];
+char  analog1[3];
+char  analog2[3];
+char  analog3[3];
+char  analog4[3];
+char  analog5[3];
+char  digital1[8];
+
+char  analog_name1[7];
+char  analog_name2[7];
+char  analog_name3[6];
+char  analog_name4[6];
+char  analog_name5[5];
+char  digital_name1[6];
+char  digital_name2[5];
+char  digital_name3[4];
+char  digital_name4[4];
+char  digital_name5[4];
+char  digital_name6[3];
+char  digital_name7[3];
+char  digital_name8[3];
+
+
+char  analog_unit1[7];
+char  analog_unit2[7];
+char  analog_unit3[6];
+char  analog_unit4[6];
+char  analog_unit5[5];
+char  digital_unit1[6];
+char  digital_unit2[5];
+char  digital_unit3[4];
+char  digital_unit4[4];
+char  digital_unit5[4];
+char  digital_unit6[3];
+char  digital_unit7[3];
+char  digital_unit8[3];
+
+
+
 
 /*
  * 
@@ -329,8 +374,8 @@ void send_payload(char type)
    * 
    * DATA TYPE    : T
    * SEQUENCE NO  : #xxx,(3-digit number)
-   * ANALOG FIELD : xxx,(decimal 0-255)
-   * DIGITAL FIELD: bbbbbbbb (binary 0/1)
+   * ANALOG FIELD 1-5 : xxx,(decimal 0-255)
+   * DIGITAL FIELD: 1 bbbbbbbb (binary 0/1)
    * COMMENT      : n
    *
    *
@@ -399,6 +444,27 @@ void send_payload(char type)
     send_char_NRZI(sym_tab, true);
 
     send_string_len(comment, strlen(comment));
+  }
+  else if(type == _TELEMETRY_REPORT)
+  {
+    send_char_NRZI(_DT_POS, true);
+    send_string_len(lati, strlen(lati));
+    send_char_NRZI(sym_ovl, true);
+    send_string_len(lon, strlen(lon));
+    send_char_NRZI(sym_tab, true);
+  }
+     * DATA TYPE    : T
+   * SEQUENCE NO  : #xxx,(3-digit number)
+   * ANALOG FIELD 1-5 : xxx,(decimal 0-255)
+   * DIGITAL FIELD: 1 bbbbbbbb (binary 0/1)
+   * COMMENT      : n
+  else if(type == _TELEMETRY_PARAMETER)
+  {
+    
+  }
+  else if(type == _TELEMETRY_BIT)
+  {
+    
   }
   else
   {
