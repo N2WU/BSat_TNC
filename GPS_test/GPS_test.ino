@@ -159,7 +159,11 @@ char  digital_unit6[3];
 char  digital_unit7[3];
 char  digital_unit8[3];
 
+int rand_num;
+char *telem_result = malloc(4);
 
+int seq_result;
+char *seq_result = malloc(4);
 
 
 /*
@@ -179,6 +183,9 @@ void send_packet(char packet_type);
 void send_flag(unsigned char flag_len);
 void send_header(char msg_type);
 void send_payload(char type);
+
+char get_telem_data(void); //example; each telemetry field is unique and will take separate fields
+char get_sequence(void);
 
 char rx_gprmc(void);
 char parse_gprmc(void);
@@ -325,6 +332,28 @@ void send_header(char msg_type)
   send_char_NRZI(_PID, true);
 }
 
+
+char get_telem_data(void)
+{
+ //Each telemetry field would be unique in essence
+ //So channelizing by a function doesn't make any sense
+  rand_num = random(0,255);
+  telem_result = printf("%03d", rand_num);
+  return telem_result;
+  
+}
+
+char get_sequence(void)
+{
+ //Each telemetry field would be unique in essence
+ //So channelizing by a function doesn't make any sense
+  seq_int = 0;
+  seq_int++;
+  seq_result = printf("%03d", seq_int);
+  return seq_result;
+  
+}
+
 void send_payload(char type)
 {
   /*
@@ -437,7 +466,7 @@ void send_payload(char type)
   }
   else if(type == _FIXPOS_STATUS)
   {
-    send_char_NRZI(_DT_POS, true);
+    send_char_NRZI(_DT_POS, true); // I may have broken this
     send_string_len(lati, strlen(lati));
     send_char_NRZI(sym_ovl, true);
     send_string_len(lon, strlen(lon));
@@ -447,24 +476,94 @@ void send_payload(char type)
   }
   else if(type == _TELEMETRY_REPORT)
   {
-    send_char_NRZI(_DT_POS, true);
-    send_string_len(lati, strlen(lati));
-    send_char_NRZI(sym_ovl, true);
-    send_string_len(lon, strlen(lon));
-    send_char_NRZI(sym_tab, true);
+    send_char_NRZI('T', true);
+    send_char_NRZI('#', true);
+    sequence = getsequence();
+    send_string_len(sequence, strlen(sequence));
+    send_char_NRZI(',', true);
+    analog1 = get_telem_data();
+    send_string_len(analog1, strlen(analog1));
+    send_char_NRZI(',', true);
+    analog2 = get_telem_data();
+    send_string_len(analog2, strlen(analog2));
+    send_char_NRZI(',', true);
+    analog3 = get_telem_data();
+    send_string_len(analog3, strlen(analog3));
+    send_char_NRZI(',', true);
+    analog4 = get_telem_data();
+    send_string_len(analog4, strlen(analog4));
+    send_char_NRZI(',', true);
+    analog5 = get_telem_data();
+    send_string_len(analog5, strlen(analog5));
+    send_char_NRZI(',', true);
+    digital = "00000000";
+    send_string_len(digital, strlen(digital));
+    //send_string_len(comment, strlen(comment));
   }
-     * DATA TYPE    : T
-   * SEQUENCE NO  : #xxx,(3-digit number)
-   * ANALOG FIELD 1-5 : xxx,(decimal 0-255)
-   * DIGITAL FIELD: 1 bbbbbbbb (binary 0/1)
-   * COMMENT      : n
   else if(type == _TELEMETRY_PARAMETER)
   {
-    
+    send_string_len("PARM.", strlen("PARM."));
+    send_string_len("VOLTAGE", strlen("VOLTAGE"));
+    send_char_NRZI(',', true);
+    send_string_len("CURRENT", strlen("CURRENT"));
+    send_char_NRZI(',', true);
+    send_string_len("POWER", strlen("POWER"));
+    send_char_NRZI(',', true);
+    send_string_len("ALT", strlen("ALT"));
+    send_char_NRZI(',', true);
+    send_string_len("PRES", strlen("PRES"));
+    send_char_NRZI(',', true);
+    send_string_len("B1", strlen("B1"));
+    send_char_NRZI(',', true);
+    send_string_len("B2", strlen("B2"));
+    send_char_NRZI(',', true);
+    send_string_len("B3", strlen("B3"));
+    send_char_NRZI(',', true);
+    send_string_len("B4", strlen("B4"));
+    send_char_NRZI(',', true);
+    send_string_len("B5", strlen("B5"));
+    send_char_NRZI(',', true);
+    send_string_len("B6", strlen("B6"));
+    send_char_NRZI(',', true);
+    send_string_len("B7", strlen("B7"));
+    send_char_NRZI(',', true);
+    send_string_len("B8", strlen("B8"));
+  }
+    else if(type == _TELEMETRY_UNIT)
+  {
+    send_string_len("UNIT.", strlen("UNIT."));
+    send_string_len("VOLTS", strlen("VOLTS"));
+    send_char_NRZI(',', true);
+    send_string_len("AMPS", strlen("AMPS"));
+    send_char_NRZI(',', true);
+    send_string_len("WATTS", strlen("WATTS"));
+    send_char_NRZI(',', true);
+    send_string_len("M", strlen("M"));
+    send_char_NRZI(',', true);
+    send_string_len("KPA", strlen("KPA"));
+    send_char_NRZI(',', true);
+    send_string_len("B1", strlen("B1"));
+    send_char_NRZI(',', true);
+    send_string_len("B2", strlen("B2"));
+    send_char_NRZI(',', true);
+    send_string_len("B3", strlen("B3"));
+    send_char_NRZI(',', true);
+    send_string_len("B4", strlen("B4"));
+    send_char_NRZI(',', true);
+    send_string_len("B5", strlen("B5"));
+    send_char_NRZI(',', true);
+    send_string_len("B6", strlen("B6"));
+    send_char_NRZI(',', true);
+    send_string_len("B7", strlen("B7"));
+    send_char_NRZI(',', true);
+    send_string_len("B8", strlen("B8"));
   }
   else if(type == _TELEMETRY_BIT)
   {
-    
+    send_string_len("BITS.", strlen("BITS."));
+    send_string_len("00000000", strlen("00000000"));
+    send_char_NRZI(',', true);
+    send_string_len("N2WU BalloonSat", strlen("N2WU BalloonSat"));
   }
   else
   {
