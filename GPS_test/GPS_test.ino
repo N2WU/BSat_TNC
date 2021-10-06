@@ -48,10 +48,10 @@
 #define _PD       6
 #define _POW      5
 
-#define DRJ_TXD 10
-#define DRJ_RXD 11
+//#define DRJ_TXD 10
+//#define DRJ_RXD 11
 
-SoftwareSerial dorji(DRJ_RXD, DRJ_TXD);
+//SoftwareSerial dorji(DRJ_RXD, DRJ_TXD); // Dorji is connected via Serial UART on HamWing
 
 bool nada = _2400;
 
