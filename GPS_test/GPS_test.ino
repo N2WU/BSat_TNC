@@ -18,7 +18,7 @@
 //TAKEN FROM HANDIKO FOR N2WU BALLOONSAT TNC
 #include <math.h>
 #include <stdio.h>
-#include <SoftwareSerial.h>
+//#include <SoftwareSerial.h>
 
 // Defines the Square Wave Output Pin
 #define OUT_PIN 12
